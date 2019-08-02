@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-exporter-deployment
+  labels:
+    app: test-exporter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: test-exporter
+  template:
+    metadata:
+      labels:
+        app: test-exporter
+    spec:
+      containers:
+      - name: test-exporter
+        image: test_exporter:v0.1
+        ports:
+        - containerPort: 10000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test-exporter
+    defind_job: abcde
+
+  name: test-exporter
+spec:
+  ports:
+  - name: http10000
+    port: 10000
+    targetPort: 10000
+  selector:
+    app: test-exporter
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: test-exporter
+    defind_job: abcde
+
+  name: test-exporter
+spec:
+  endpoints:
+  - interval: 5s
+    port: http10000
+    scheme: http
+  jobLabel: test-exporter
+  selector:
+    matchLabels:
+      app: test-exporter
+

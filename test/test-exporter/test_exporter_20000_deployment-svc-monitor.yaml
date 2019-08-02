@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-test
+  labels:
+    app: external-exporter-20000
+spec:
+  ports:
+  - port: 20000
+    targetPort: 20000
+    # name: external-test
+    
+
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: external-test
+  labels:
+    app: external-exporter-20000
+subsets:
+- addresses:
+    - ip: 192.168.0.3
+  ports:
+    - port: 20000
+
+---
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: external-exporter-20000-label
+  name: external-exporter-20000
+spec:
+  endpoints:
+  - interval: 5s
+    scheme: http
+  jobLabel: external-exporter-20000-job
+  selector:
+    matchLabels:
+      app: external-exporter-20000
+

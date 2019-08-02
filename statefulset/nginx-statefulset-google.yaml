@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-google
+  labels:
+    app: nginx-google
+spec:
+  ports:
+  - port: 80
+    name: web-google
+  clusterIP: None
+  selector:
+    app: nginx-google
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: nginx-google
+spec:
+  serviceName: "nginx-google"
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx-google
+    spec:
+      containers:
+      - name: nginx
+        image: mirrorgooglecontainers/nginx-slim:0.8
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+      annotations:
+        volume.alpha.kubernetes.io/storage-class: anything
+    spec:
+      storageClassName: "nfs-storageclass"
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100M
