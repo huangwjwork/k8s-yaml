@@ -40,4 +40,3 @@ spec:
   selector:
     matchLabels:
       app: external-exporter-20000
-

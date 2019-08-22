@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-hostnetwork
+  namespace: default
+spec:
+  containers:
+  - image: busybox:1.28
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+    name: busybox
+  restartPolicy: Always
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+
+#   / # ip addr show eth0
+# 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc mq qlen 1000
+#     link/ether fa:16:3e:7b:89:7e brd ff:ff:ff:ff:ff:ff
+#     inet 192.168.0.3/20 brd 192.168.15.255 scope global dynamic eth0
+#        valid_lft 68050sec preferred_lft 68050sec
+#     inet6 fe80::f816:3eff:fe7b:897e/64 scope link 
+#        valid_lft forever preferred_lft forever
+# / # cat /etc/resolv.conf 
+# nameserver 10.96.0.10
+# search default.svc.cluster.local svc.cluster.local cluster.local
+# options ndots:5
