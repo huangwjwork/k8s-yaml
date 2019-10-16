@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    test: liveness
+  name: liveness-http
+spec:
+  containers:
+  - name: liveness
+    image: mirrorgooglecontainers/liveness
+    args:
+    - /server
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+        httpHeaders:
+        - name: Custom-Header
+          value: Awesome
+      initialDelaySeconds: 3
+      periodSeconds: 3
+
+# Events:
+#   Type     Reason     Age                   From               Message
+#   ----     ------     ----                  ----               -------
+#   Normal   Scheduled  2m41s                 default-scheduler  Successfully assigned default/liveness-http to huangwj
+#   Normal   Pulled     101s (x3 over 2m28s)  kubelet, huangwj   Successfully pulled image "mirrorgooglecontainers/liveness"
+#   Normal   Created    100s (x3 over 2m28s)  kubelet, huangwj   Created container liveness
+#   Normal   Started    100s (x3 over 2m28s)  kubelet, huangwj   Started container liveness
+#   Normal   Pulling    83s (x4 over 2m40s)   kubelet, huangwj   Pulling image "mirrorgooglecontainers/liveness"
+#   Warning  Unhealthy  83s (x9 over 2m17s)   kubelet, huangwj   Liveness probe failed: HTTP probe failed with statuscode: 500
+#   Normal   Killing    83s (x3 over 2m11s)   kubelet, huangwj   Container liveness failed liveness probe, will be restarted

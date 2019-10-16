@@ -31,10 +31,12 @@ metadata:
 
   name: test-exporter
 spec:
+  type: NodePort
   ports:
   - name: http10000
     port: 10000
     targetPort: 10000
+    nodePort: 30000
   selector:
     app: test-exporter
 

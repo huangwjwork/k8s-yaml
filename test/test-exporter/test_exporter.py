@@ -1,4 +1,14 @@
-#!/bin/env python3
+#!/usr/bin/env python3
+# -*- encoding: utf-8 -*-
+'''
+@Time :    2019/09/15 10:57:35
+@Author :  huangwjwork 
+@Email :   huangwjwork@gmail.com
+@Github :  https://github.com/huangwjwork
+'''
+
+# here put the import lib
+
 from prometheus_client import Gauge, start_http_server
 import random
 import time
